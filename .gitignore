@@ -1,0 +1,13 @@
+node_modules/
+.vite/
+coverage/
+dist/
+
+*.log
+tmp-*.png
+.tmp-chrome*/
+
+tools/__pycache__/
+*.py[cod]
+
+.env*.local

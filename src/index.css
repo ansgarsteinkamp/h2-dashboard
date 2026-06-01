@@ -1,0 +1,442 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+   --color-*: initial;
+
+   --color-transparent: transparent;
+   --color-black: #000;
+   --color-white: #fff;
+
+   --text-*: initial;
+
+   --text-5xl: 3rem;
+   --text-5xl--line-height: 1;
+   --text-4xl: 2.25rem;
+   --text-4xl--line-height: 1.1;
+   --text-3xl: 1.875rem;
+   --text-3xl--line-height: 1.2;
+   --text-2xl: 1.5rem;
+   --text-2xl--line-height: 1.3;
+   --text-xl: 1.25rem;
+   --text-xl--line-height: 1.4;
+   --text-lg: 1.125rem;
+   --text-lg--line-height: 1.5;
+   --text-base: 1rem;
+   --text-base--line-height: 1.5;
+   --text-sm: 0.875rem;
+   --text-sm--line-height: 1.5;
+   --text-xs: 0.75rem;
+   --text-xs--line-height: 1.5;
+   --text-2xs: 0.65rem;
+   --text-2xs--line-height: 1.5;
+   --text-3xs: 0.575rem;
+   --text-3xs--line-height: 1.5;
+   --text-4xs: 0.5rem;
+   --text-4xs--line-height: 1.5;
+
+   --breakpoint-*: initial;
+
+   --breakpoint-3xs: 411px;
+   --breakpoint-2xs: 480px;
+   --breakpoint-xs: 540px;
+   --breakpoint-sm: 640px;
+   --breakpoint-md: 768px;
+   --breakpoint-lg: 1024px;
+   --breakpoint-xl: 1280px;
+   --breakpoint-2xl: 1536px;
+
+   --font-sans:
+      var(--font-ui), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+      "Noto Color Emoji";
+   --font-mono:
+      "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+@font-face {
+   font-family: "DM Mono";
+   font-display: swap;
+   font-style: italic;
+   font-weight: 300;
+   src: url("./assets/fonts/dm-mono-italic-300.woff2") format("woff2");
+}
+
+@font-face {
+   font-family: "DM Mono";
+   font-display: swap;
+   font-style: italic;
+   font-weight: 400;
+   src: url("./assets/fonts/dm-mono-italic-400.woff2") format("woff2");
+}
+
+@font-face {
+   font-family: "DM Mono";
+   font-display: swap;
+   font-style: italic;
+   font-weight: 500;
+   src: url("./assets/fonts/dm-mono-italic-500.woff2") format("woff2");
+}
+
+@font-face {
+   font-family: "DM Mono";
+   font-display: swap;
+   font-style: normal;
+   font-weight: 300;
+   src: url("./assets/fonts/dm-mono-normal-300.woff2") format("woff2");
+}
+
+@font-face {
+   font-family: "DM Mono";
+   font-display: swap;
+   font-style: normal;
+   font-weight: 400;
+   src: url("./assets/fonts/dm-mono-normal-400.woff2") format("woff2");
+}
+
+@font-face {
+   font-family: "DM Mono";
+   font-display: swap;
+   font-style: normal;
+   font-weight: 500;
+   src: url("./assets/fonts/dm-mono-normal-500.woff2") format("woff2");
+}
+
+@font-face {
+   font-family: "Montserrat";
+   font-display: swap;
+   font-style: italic;
+   font-weight: 100 900;
+   src: url("./assets/fonts/montserrat-italic-latin-ext.woff2") format("woff2");
+   unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+      U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+   font-family: "Montserrat";
+   font-display: swap;
+   font-style: italic;
+   font-weight: 100 900;
+   src: url("./assets/fonts/montserrat-italic-latin.woff2") format("woff2");
+   unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F,
+      U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+   font-family: "Montserrat";
+   font-display: swap;
+   font-style: normal;
+   font-weight: 100 900;
+   src: url("./assets/fonts/montserrat-normal-latin-ext.woff2") format("woff2");
+   unicode-range:
+      U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F,
+      U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+   font-family: "Montserrat";
+   font-display: swap;
+   font-style: normal;
+   font-weight: 100 900;
+   src: url("./assets/fonts/montserrat-normal-latin.woff2") format("woff2");
+   unicode-range:
+      U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F,
+      U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+   color-scheme: light;
+
+   --font-ui:
+      "Montserrat", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+      "Noto Color Emoji";
+   --background: #ffffff;
+   --foreground: #013c74;
+   --card: #ffffff;
+   --card-foreground: #013c74;
+   --popover: #ffffff;
+   --popover-foreground: #013c74;
+   --primary: #35aeb5;
+   --primary-foreground: #ffffff;
+   --label-accent: #d01d74;
+   --secondary: #045f69;
+   --secondary-foreground: #ffffff;
+   --muted: #f2fbfa;
+   --muted-foreground: #3f5f72;
+   --map-background: #ffffff;
+   --accent: #d2eae6;
+   --accent-foreground: #013c74;
+   --destructive: #b42318;
+   --destructive-foreground: #ffffff;
+   --border: #9ed8d7;
+   --input: #76c7c9;
+   --field: #ffffff;
+   --ring: #35aeb5;
+   --map-pipeline-h2: #52a436;
+   --map-pipeline-h2-context: #bedfd9;
+   --map-pipeline-h2-halo: #3f8429;
+   --map-pipeline-co2: #d01d74;
+   --map-pipeline-co2-context: #f3c9dd;
+   --map-pipeline-co2-halo: #a8165f;
+   --map-pipeline-gas: #8a8f98;
+   --map-pipeline-gas-context: #c7ccd1;
+   --map-pipeline-gas-halo: #636972;
+   --map-pipeline-fallback: #013c74;
+   --map-pipeline-selection-halo-fallback: #013c74;
+   --map-country-context-stroke: #9ed8d7;
+   --map-country-context-fill: #f6fcfc;
+   --map-country-germany-stroke: #f0efa9;
+   --map-country-germany-fill: #ffffff;
+   --map-legend-background: #f6fcfc;
+   --radius: 0.5rem;
+   --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+   --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
+   --shadow-sm: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+   --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+   --shadow-md: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1);
+   --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 4px 6px -1px hsl(0 0% 0% / 0.1);
+   --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
+   --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
+}
+
+.dark {
+   color-scheme: dark;
+
+   --font-ui:
+      "DM Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+   --background: #262624;
+   --foreground: #c3c0b6;
+   --card: #262624;
+   --card-foreground: #faf9f5;
+   --popover: #30302e;
+   --popover-foreground: #e5e5e2;
+   --primary: #d97757;
+   --primary-foreground: #ffffff;
+   --label-accent: #d97757;
+   --secondary: #faf9f5;
+   --secondary-foreground: #30302e;
+   --muted: #1b1b19;
+   --muted-foreground: #b7b5a9;
+   --map-background: #20201d;
+   --accent: #1a1915;
+   --accent-foreground: #f5f4ee;
+   --destructive: #ef4444;
+   --destructive-foreground: #ffffff;
+   --border: #3e3e38;
+   --input: #52514a;
+   --field: #30302e;
+   --ring: #d97757;
+   --map-pipeline-h2: #86b7a7;
+   --map-pipeline-h2-context: #496d5f;
+   --map-pipeline-h2-halo: #86b7a7;
+   --map-pipeline-co2: #d97757;
+   --map-pipeline-co2-context: #7d4c3f;
+   --map-pipeline-co2-halo: #d97757;
+   --map-pipeline-gas: #b7b5a9;
+   --map-pipeline-gas-context: #74746a;
+   --map-pipeline-gas-halo: #b7b5a9;
+   --map-pipeline-fallback: #e5e5e2;
+   --map-pipeline-selection-halo-fallback: #faf9f5;
+   --map-country-context-stroke: #74746a;
+   --map-country-context-fill: #30302e;
+   --map-country-germany-stroke: #faf9f5;
+   --map-country-germany-fill: #22221f;
+   --map-legend-background: rgb(27 27 25 / 0.9);
+}
+
+@theme inline {
+   --color-background: var(--background);
+   --color-foreground: var(--foreground);
+   --color-card: var(--card);
+   --color-card-foreground: var(--card-foreground);
+   --color-popover: var(--popover);
+   --color-popover-foreground: var(--popover-foreground);
+   --color-primary: var(--primary);
+   --color-primary-foreground: var(--primary-foreground);
+   --color-label-accent: var(--label-accent);
+   --color-secondary: var(--secondary);
+   --color-secondary-foreground: var(--secondary-foreground);
+   --color-muted: var(--muted);
+   --color-muted-foreground: var(--muted-foreground);
+   --color-map-background: var(--map-background);
+   --color-accent: var(--accent);
+   --color-accent-foreground: var(--accent-foreground);
+   --color-destructive: var(--destructive);
+   --color-destructive-foreground: var(--destructive-foreground);
+   --color-border: var(--border);
+   --color-input: var(--input);
+   --color-field: var(--field);
+   --color-ring: var(--ring);
+   --radius-sm: calc(var(--radius) - 4px);
+   --radius-md: calc(var(--radius) - 2px);
+   --radius-lg: var(--radius);
+   --radius-xl: calc(var(--radius) + 4px);
+
+   --shadow-2xs: var(--shadow-2xs);
+   --shadow-xs: var(--shadow-xs);
+   --shadow-sm: var(--shadow-sm);
+   --shadow: var(--shadow);
+   --shadow-md: var(--shadow-md);
+   --shadow-lg: var(--shadow-lg);
+   --shadow-xl: var(--shadow-xl);
+   --shadow-2xl: var(--shadow-2xl);
+}
+
+@layer base {
+   html {
+      -webkit-tap-highlight-color: transparent;
+   }
+
+   button:not(:disabled),
+   [role="button"]:not(:disabled) {
+      cursor: pointer;
+   }
+
+   * {
+      @apply border-border outline-ring/50;
+   }
+
+   body {
+      font-family: var(--font-ui);
+
+      @apply bg-background text-sm text-foreground selection:bg-primary selection:text-primary-foreground xs:text-base;
+   }
+
+   * {
+      scrollbar-color: color-mix(in srgb, var(--primary) 36%, var(--border)) var(--accent);
+      scrollbar-width: thin;
+   }
+
+   *::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+   }
+
+   *::-webkit-scrollbar-track {
+      background: var(--accent);
+   }
+
+   *::-webkit-scrollbar-thumb {
+      border: 2px solid var(--accent);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--primary) 36%, var(--border));
+   }
+
+   *::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+   }
+}
+
+.app-shell {
+   background:
+      linear-gradient(180deg, color-mix(in srgb, var(--primary) 8%, transparent), transparent 34%), var(--background);
+}
+
+.leaflet-container {
+   font: inherit;
+   color: var(--foreground);
+   background: var(--map-background);
+}
+
+.leaflet-control-zoom {
+   display: none !important;
+}
+
+.leaflet-interactive:focus-visible {
+   outline: 2px solid var(--primary);
+   outline-offset: 2px;
+}
+
+.light .country-boundary {
+   stroke-opacity: 0.54;
+   stroke-width: 0.95px;
+}
+
+.light .country-boundary-germany {
+   stroke-opacity: 1;
+   stroke-width: 8px;
+}
+
+.pipeline-selection-halo {
+   animation: selected-pipeline-halo 1.8s ease-in-out infinite;
+   pointer-events: none;
+}
+
+.light .pipeline-selection-halo {
+   animation-name: selected-pipeline-halo-light;
+}
+
+@keyframes selected-pipeline-halo {
+   0%,
+   100% {
+      opacity: 0.28;
+      stroke-width: 12px;
+   }
+
+   50% {
+      opacity: 0.72;
+      stroke-width: 20px;
+   }
+}
+
+@keyframes selected-pipeline-halo-light {
+   0%,
+   100% {
+      opacity: 0.18;
+      stroke-width: 10px;
+   }
+
+   50% {
+      opacity: 0.38;
+      stroke-width: 15px;
+   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+   .pipeline-selection-halo {
+      animation: none;
+      opacity: 0.5;
+   }
+}
+
+.leaflet-tooltip-pane {
+   z-index: 1100;
+}
+
+.map-tooltip {
+   display: grid;
+   gap: 4px;
+   padding: 7px 9px;
+   border: 1px solid var(--border);
+   background: var(--popover);
+   color: var(--popover-foreground);
+   box-shadow: none;
+   font-family: var(--font-ui);
+   font-size: 0.68rem;
+   line-height: 1.625;
+   max-width: min(20rem, calc(100vw - 2rem));
+   width: max-content;
+   overflow-wrap: break-word;
+   white-space: normal;
+}
+
+.light .map-tooltip {
+   box-shadow: var(--shadow-md);
+}
+
+.map-tooltip strong {
+   color: var(--secondary);
+   font-weight: 500;
+}
+
+.map-tooltip span {
+   display: block;
+   color: var(--muted-foreground);
+}
+
+.leaflet-tooltip-top::before {
+   border-top-color: var(--border);
+}
