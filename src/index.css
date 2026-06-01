@@ -305,6 +305,12 @@
       @apply bg-background text-sm text-foreground selection:bg-primary selection:text-primary-foreground xs:text-base;
    }
 
+   @media (min-width: 1360px) {
+      html:has(.app-shell) {
+         overflow: hidden;
+      }
+   }
+
    * {
       scrollbar-color: color-mix(in srgb, var(--primary) 36%, var(--border)) var(--accent);
       scrollbar-width: thin;

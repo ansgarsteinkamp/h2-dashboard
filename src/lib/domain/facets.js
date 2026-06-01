@@ -55,7 +55,7 @@ export function buildFilterOptions(projects, features = []) {
 
    return {
       builders: [{ value: ALL_VALUE, label: "Alle Bauherren" }, ...sortedValues(sets.builders).map(option)],
-      clusters: [{ value: ALL_VALUE, label: "Alle Cluster" }, ...sortedValues(sets.clusters).map(option)],
+      clusters: [{ value: ALL_VALUE, label: "Alle Projektcluster" }, ...sortedValues(sets.clusters).map(option)],
       measures: [
          { value: ALL_VALUE, label: "Alle Maßnahmen" },
          ...sortedValues(sets.measures).map(value => labeledOption(value, measureLabel(value)))
@@ -65,7 +65,7 @@ export function buildFilterOptions(projects, features = []) {
          ...orderedMediums(sets.mediums).map(value => labeledOption(value, mediumLabel(value)))
       ],
       networkElements: [
-         { value: ALL_VALUE, label: "Alle Netzelementtypen" },
+         { value: ALL_VALUE, label: "Alle Netzelemente" },
          ...sortedValues(sets.networkElements).map(option)
       ],
       projectTypes: [{ value: ALL_VALUE, label: "Alle Projekt-Typen" }, ...sortedValues(sets.projectTypes).map(option)],

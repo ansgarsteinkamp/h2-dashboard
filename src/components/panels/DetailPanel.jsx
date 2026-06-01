@@ -26,7 +26,7 @@ const PROJECT_GROUPS = [
          ["id", "ID"],
          ["name", "Projektname"],
          ["alias", "Alias"],
-         ["cluster", "Cluster"],
+         ["cluster", "Projektcluster"],
          ["medium", "Medium", "medium"],
          ["networkElement", "Netzelement"],
          ["measure", "Maßnahme"],
@@ -55,14 +55,14 @@ const PROJECT_GROUPS = [
          ["dates.commissioningDeltaDays", "Differenz IBN-Termine", "days"],
          ["dates.projectStart", "Projektstart", "date", "dates.projectStartPrecision"],
          ["dates.constructionStart", "Baustart", "date", "dates.constructionStartPrecision"],
-         ["hasSchedule", "Terminplan vorhanden", "boolean"]
+         ["hasSchedule", "Terminplan-Daten vorhanden", "boolean"]
       ]
    },
    {
       id: "technik",
       title: "Technik und Lage",
       fields: [
-         ["technical.lengthInternalKm", "Länge intern", "km"],
+         ["technical.lengthInternalKm", "Projektlänge intern", "km"],
          ["technical.lengthExternalKm", "Länge extern", "km"],
          ["technical.lengthDeltaKm", "Differenz Längen", "km"],
          ["technical.dnRaw", "DN", "dn"],
@@ -90,13 +90,8 @@ const PROJECT_GROUPS = [
    },
    {
       id: "karte",
-      title: "Karte und Datenherkunft",
-      fields: [
-         ["networkFeatureIds", "Netzelemente auf Karte"],
-         ["source.primary.file", "Primärquelle"],
-         ["source.primary.sheet", "Registerkarte"],
-         ["source.primary.row", "Quellzeile"]
-      ]
+      title: "Kartenbezug",
+      fields: [["networkFeatureIds", "Netzelemente auf Karte"]]
    }
 ];
 
@@ -238,7 +233,7 @@ export default function DetailPanel({ selection, onClose }) {
             </div>
          ) : (
             <div className="mt-4 grid gap-2.5">
-               <h3 className="m-0 text-[0.7rem] font-medium text-label-accent uppercase">Netzelement von Dritten</h3>
+               <h3 className="m-0 text-[0.7rem] font-medium text-label-accent uppercase">Leitung Dritter</h3>
                <dl className="grid border-t border-border/50">
                   {[
                      ["id", "Netzelement-ID"],

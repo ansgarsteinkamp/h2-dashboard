@@ -92,6 +92,28 @@ function filterNetworkCollection(collection, filters, query, visibleProjectIds) 
    };
 }
 
+function normalizeYearRange(filters, key, value) {
+   if (
+      key === "yearFrom" &&
+      value !== ALL_VALUE &&
+      filters.yearTo !== ALL_VALUE &&
+      Number(value) > Number(filters.yearTo)
+   ) {
+      return { ...filters, yearFrom: value, yearTo: value };
+   }
+
+   if (
+      key === "yearTo" &&
+      value !== ALL_VALUE &&
+      filters.yearFrom !== ALL_VALUE &&
+      Number(value) < Number(filters.yearFrom)
+   ) {
+      return { ...filters, yearFrom: value, yearTo: value };
+   }
+
+   return { ...filters, [key]: value };
+}
+
 export function usePipelineFilters(dashboardData) {
    const [filters, setFilters] = useState(initialPipelineFilters);
    const query = getSearchQuery(filters.searchTerm);
@@ -127,7 +149,7 @@ export function usePipelineFilters(dashboardData) {
       });
    }, [dashboardData.projects.length, filteredProjects, filteredCollection]);
 
-   const setFilter = (key, value) => setFilters(current => ({ ...current, [key]: value }));
+   const setFilter = (key, value) => setFilters(current => normalizeYearRange(current, key, value));
    const resetFilters = () => setFilters(initialPipelineFilters);
 
    return {

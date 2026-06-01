@@ -99,9 +99,9 @@ export default function PipelineWorkspace({ countries, dashboardData }) {
    };
 
    return (
-      <main className="app-shell min-h-svh bg-background p-4 text-foreground max-lg:p-3">
+      <main className="app-shell min-h-svh bg-background p-4 text-foreground min-[1360px]:h-svh min-[1360px]:overflow-hidden max-lg:p-3">
          <Topbar />
-         <section className="mx-auto grid w-full max-w-440 grid-cols-[24rem_minmax(0,1fr)] items-stretch gap-4 min-[1360px]:h-[calc(100svh-112px)] min-[1360px]:min-h-0 min-[1360px]:grid-cols-[26rem_minmax(340px,1fr)_26.5rem] max-lg:grid-cols-1">
+         <section className="mx-auto grid w-full max-w-440 grid-cols-[24rem_minmax(0,1fr)] items-stretch gap-4 min-[1360px]:h-[calc(100svh-112px)] min-[1360px]:min-h-0 min-[1360px]:grid-cols-[26rem_minmax(340px,1fr)_26.5rem] min-[1360px]:overflow-hidden max-lg:grid-cols-1">
             <FilterPanel
                className={
                   selection.selection
@@ -134,7 +134,7 @@ export default function PipelineWorkspace({ countries, dashboardData }) {
             </div>
 
             <InspectorPanel
-               className={`col-span-2 row-start-2 max-h-104 min-[1360px]:col-span-1 min-[1360px]:row-auto min-[1360px]:max-h-none max-lg:col-span-1 max-lg:row-start-auto max-lg:h-auto max-lg:max-h-[min(78svh,44rem)] ${selection.selection ? "max-lg:order-1" : "max-lg:order-3"}`}
+               className={`col-span-2 row-start-2 max-h-104 min-[1360px]:col-span-1 min-[1360px]:row-auto min-[1360px]:h-full min-[1360px]:max-h-none min-[1360px]:overflow-hidden max-lg:col-span-1 max-lg:row-start-auto max-lg:h-auto max-lg:max-h-[min(78svh,44rem)] ${selection.selection ? "max-lg:order-1" : "max-lg:order-3"}`}
                onClearSearch={clearSearchTerm}
                onCloseSelection={closeSelection}
                onSearchTermChange={searchPipelines}

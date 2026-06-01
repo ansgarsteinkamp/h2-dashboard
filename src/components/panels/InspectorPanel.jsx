@@ -101,7 +101,7 @@ export default function InspectorPanel({
             <div className="grid min-h-10 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 rounded-md border border-primary/45 bg-field/75 px-3 text-muted-foreground shadow-none transition-colors hover:border-primary/65 focus-within:border-ring focus-within:bg-popover focus-within:ring-2 focus-within:ring-ring/65 dark:focus-within:border-primary/90 dark:focus-within:ring-primary/20">
                <Search aria-hidden="true" className="size-3.5" />
                <input
-                  aria-label="Suche nach ID, Projekt, Bauherr, Cluster oder Status"
+                  aria-label="Suche nach Projekt, ID, Bauherr oder Projektcluster"
                   className="min-w-0 border-0 bg-transparent text-[0.8rem] leading-5 text-popover-foreground outline-none placeholder:text-muted-foreground/55"
                   onChange={event => onSearchTermChange(event.target.value)}
                   placeholder="Suche"

@@ -18,20 +18,22 @@ const SEGMENT_BUTTON_CLASS =
    "inline-flex min-h-9 min-w-0 items-center justify-center gap-2 rounded-md border border-border bg-muted px-3 text-[0.72rem] text-foreground transition-colors hover:border-primary/70 hover:bg-primary/20 hover:text-secondary focus-visible:ring-3 focus-visible:ring-ring/65 focus-visible:outline-none max-lg:min-h-10 dark:focus-visible:ring-ring/50";
 const ACTIVE_SEGMENT_BUTTON_CLASS = "border-primary/80 bg-primary/15 text-card-foreground";
 const RESET_BUTTON_CLASS =
-   "inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md border border-border bg-muted/75 px-3.5 text-[0.72rem] font-medium text-card-foreground transition-colors hover:border-primary/70 hover:bg-primary/15 hover:text-secondary focus-visible:ring-3 focus-visible:ring-ring/65 focus-visible:outline-none dark:focus-visible:ring-ring/50";
+   "inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-md border border-primary/60 bg-primary/15 px-3.5 text-[0.72rem] font-medium text-card-foreground transition-colors hover:border-primary hover:bg-primary/20 hover:text-secondary focus-visible:ring-3 focus-visible:ring-ring/65 focus-visible:outline-none dark:focus-visible:ring-ring/50";
 
 const HELP_TEXT = {
    builder: "Filtert nach dem in den Quelldaten gepflegten Bauherrn oder Partner.",
    cluster: "Filtert nach dem übergeordneten Projektcluster aus den Quelldaten.",
-   ibn: "Filtert nach geplanter Inbetriebnahme. Projekte ohne IBN-Jahr erscheinen nur bei „Alle Jahre“.",
-   mapMode: "Steuert, ob die Karte alle Kartenobjekte, nur Projekt-Netzelemente oder nur Leitungen Dritter zeigt.",
-   measure: "Filtert nach fachlicher Maßnahme, z. B. Neubau, Umstellung, Umhängung oder Drittleitung.",
+   ibn: "Filtert nach internem IBN-Jahr der Projekte. Kontextleitungen nutzen das in den Geodaten angegebene Inbetriebnahmejahr.",
+   mapMode:
+      "Steuert, ob die Karte alle Kartenobjekte, nur Netzelemente aus Projekten oder nur Leitungen Dritter zeigt.",
+   measure:
+      "Filtert nach fachlicher Maßnahme, z. B. Neubau, Umstellung oder Umhängung. Leitungen Dritter werden über die Kartendarstellung getrennt.",
    medium: "Filtert Projekte und Kartenobjekte nach transportiertem Medium.",
    networkElement:
       "Filtert nach Art des Netzelements. Stationsprojekte können in der Liste erscheinen, auch wenn aktuell keine Kartenpunkte vorliegen.",
-   ogeLength: "Summe der internen Leitungslängen der aktuell ausgewählten OGE-Leitungsprojekte.",
+   ogeLength: "Summe der internen Projektlängen der aktuell ausgewählten Leitungsprojekte.",
    ogeResponsible:
-      "Filtert auf Projekte mit „OGE verantwortlich = Ja“ aus den Quelldaten. Das ist nicht identisch mit „Bauherr = OGE“; Partner- und Gemeinschaftsprojekte können abweichen.",
+      "Filtert auf Projekte mit „Bauverantwortung OGE = Ja“ aus den Quelldaten. Das ist nicht identisch mit „Bauherr = OGE“; Partner- und Gemeinschaftsprojekte können abweichen.",
    contextFeatures: "Anzahl der aktuell sichtbaren Leitungen Dritter auf der Karte.",
    contextLength: "Summe der Leitungslängen der aktuell sichtbaren Leitungen Dritter.",
    projectCount: "Anzahl der Projekte, die zu den aktiven Filtern und der Suche passen.",
@@ -108,13 +110,13 @@ function MetricsDashboard({ mapMode, metrics }) {
                description={HELP_TEXT.projectCount}
             />
             <MetricTile
-               label="Mit Karte"
+               label="Auf Karte"
                value={metricIntegerLabel(metrics.mappedProjectCount)}
                suffix={`von ${projectTotalLabel}`}
                description={HELP_TEXT.mappedProjects}
             />
             <MetricTile
-               label="Leitungslänge"
+               label="Projektlänge"
                value={metricLengthLabel(metrics.lineProjectLengthKm)}
                suffix="km"
                description={HELP_TEXT.ogeLength}
@@ -211,9 +213,9 @@ function OgeResponsibleSwitch({ active, onChange }) {
                   className="absolute top-1/2 left-0.5 size-3.5 -translate-y-1/2 rounded-full bg-muted-foreground transition-transform data-[state=checked]:translate-x-3.25 data-[state=checked]:bg-primary-foreground"
                />
             </span>
-            <span className="min-w-0 truncate text-xs font-medium text-card-foreground">Nur OGE verantwortlich</span>
+            <span className="min-w-0 truncate text-xs font-medium text-card-foreground">Nur Bauverantwortung OGE</span>
          </label>
-         <HelpTooltip className="size-4" contentClassName="max-w-80" label="OGE verantwortlich">
+         <HelpTooltip className="size-4" contentClassName="max-w-80" label="Bauverantwortung OGE">
             {HELP_TEXT.ogeResponsible}
          </HelpTooltip>
       </div>
@@ -263,14 +265,14 @@ export default function FilterPanel({
                      value={filters.medium}
                   />
                   <SegmentGroup
-                     label="Kartenlayer"
+                     label="Kartendarstellung"
                      description={HELP_TEXT.mapMode}
                      onChange={value => setFilter("mapMode", value)}
                      options={displayedMapModeOptions}
                      value={filters.mapMode}
                   />
                   <SelectField
-                     label="Netzelementtyp"
+                     label="Netzelement"
                      description={HELP_TEXT.networkElement}
                      onChange={value => setFilter("networkElement", value)}
                      options={options.networkElements}
@@ -287,7 +289,7 @@ export default function FilterPanel({
                      value={filters.measure}
                   />
                   <SelectField
-                     label="Cluster"
+                     label="Projektcluster"
                      description={HELP_TEXT.cluster}
                      onChange={value => setFilter("cluster", value)}
                      options={options.clusters}
