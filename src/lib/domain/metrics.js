@@ -1,4 +1,4 @@
-const numberOrZero = value => (Number.isFinite(Number(value)) ? Number(value) : 0);
+import { numberOrZero, sumFeatureDisplayLengths } from "@/lib/domain/lengths";
 
 const isProjectType = (project, needle) => String(project.projectType ?? project.measure ?? "").includes(needle);
 const hasMapElement = project => Array.isArray(project.networkFeatureIds) && project.networkFeatureIds.length > 0;
@@ -24,7 +24,7 @@ export function sumDashboardMetrics(projects, features, { totalProjectCount = pr
       conversionLineProjectLengthKm: sumInternalLength(conversionLineProjects),
       featureCount: features.length,
       gdrmProjectCount: gdrmProjects.length,
-      lengthKm: features.reduce((sum, feature) => sum + numberOrZero(feature.properties.lengthKm), 0),
+      lengthKm: sumFeatureDisplayLengths(features),
       lineProjectCount: lineProjects.length,
       lineProjectLengthKm: sumInternalLength(lineProjects),
       mappedProjectCount: mappedProjects.length,

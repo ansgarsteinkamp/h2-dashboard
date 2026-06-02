@@ -24,7 +24,7 @@ const projectsPayload = {
 
 const networkPayload = {
    type: "FeatureCollection",
-   metadata: { kind: "h2-dashboard-network" },
+   metadata: { kind: "h2-dashboard-network", schemaVersion: "1.0.0" },
    features: [
       {
          type: "Feature",
@@ -36,6 +36,10 @@ const networkPayload = {
             networkElement: "Leitung",
             measure: "Neubau",
             lengthKm: 12.4,
+            geometryLengthKm: 12.1,
+            sourceLengthKm: 12.4,
+            projectLengthKm: 12,
+            commissioningDatePrecision: "year",
             contextOnly: false,
             ogeParticipation: true
          },
@@ -63,6 +67,18 @@ describe("parseDashboardFiles", () => {
       expect(data.network.features).toHaveLength(1);
       expect(data.network.features[0].properties.project.name).toBe("Leitung A");
       expect(data.metadata.projectCount).toBe(1);
+   });
+
+   it("bewahrt fachliche Warnungen in den Metadaten", async () => {
+      const warningProjects = structuredClone(projectsPayload);
+      warningProjects.projects[0].name = "";
+
+      const data = await parseDashboardFiles([
+         fileFromJson("projects.json", warningProjects),
+         fileFromJson("network.geojson", networkPayload)
+      ]);
+
+      expect(data.metadata.warnings).toContain("KLU001-01: Projektname fehlt.");
    });
 
    it("blockiert umbenannte Datenpaket-Dateien", async () => {
@@ -140,5 +156,104 @@ describe("parseDashboardFiles", () => {
             fileFromJson("network.geojson", brokenNetwork)
          ])
       ).rejects.toThrow(/feature.id fehlt/);
+   });
+
+   it("blockiert unplausible neue Längenfelder", async () => {
+      const brokenNetwork = structuredClone(networkPayload);
+      brokenNetwork.features[0].properties.geometryLengthKm = 1001;
+
+      await expect(
+         parseDashboardFiles([
+            fileFromJson("projects.json", projectsPayload),
+            fileFromJson("network.geojson", brokenNetwork)
+         ])
+      ).rejects.toThrow(/geometryLengthKm ist nicht plausibel/);
+   });
+
+   it.each(["lengthKm", "geometryLengthKm", "sourceLengthKm", "projectLengthKm"])(
+      "blockiert nicht numerische Werte in %s",
+      async field => {
+         const brokenNetwork = structuredClone(networkPayload);
+         brokenNetwork.features[0].properties[field] = "";
+
+         await expect(
+            parseDashboardFiles([
+               fileFromJson("projects.json", projectsPayload),
+               fileFromJson("network.geojson", brokenNetwork)
+            ])
+         ).rejects.toThrow(new RegExp(`${field} muss eine Zahl sein`));
+      }
+   );
+
+   it("blockiert unbekannte Datumspräzisionen", async () => {
+      const brokenProjects = structuredClone(projectsPayload);
+      brokenProjects.projects[0].dates.commissioningInternalPrecision = "quarter";
+
+      await expect(
+         parseDashboardFiles([
+            fileFromJson("projects.json", brokenProjects),
+            fileFromJson("network.geojson", networkPayload)
+         ])
+      ).rejects.toThrow(/ungültige Datumspräzision/);
+   });
+
+   it("blockiert ungültige Netzwerk-Datumspräzisionen", async () => {
+      const brokenNetwork = structuredClone(networkPayload);
+      brokenNetwork.features[0].properties.commissioningDatePrecision = "quarter";
+
+      await expect(
+         parseDashboardFiles([
+            fileFromJson("projects.json", projectsPayload),
+            fileFromJson("network.geojson", brokenNetwork)
+         ])
+      ).rejects.toThrow(/commissioningDatePrecision hat eine ungültige Datumspräzision/);
+   });
+
+   it("blockiert projects.json mit falsch typisiertem dates-Feld", async () => {
+      const brokenProjects = structuredClone(projectsPayload);
+      brokenProjects.projects[0].dates = "2029";
+
+      await expect(
+         parseDashboardFiles([
+            fileFromJson("projects.json", brokenProjects),
+            fileFromJson("network.geojson", networkPayload)
+         ])
+      ).rejects.toThrow(/dates muss ein Objekt sein/);
+   });
+
+   it("blockiert geometryRefs ohne networkFeatureId", async () => {
+      const brokenProjects = structuredClone(projectsPayload);
+      brokenProjects.projects[0].geometryRefs = [{}];
+
+      await expect(
+         parseDashboardFiles([
+            fileFromJson("projects.json", brokenProjects),
+            fileFromJson("network.geojson", networkPayload)
+         ])
+      ).rejects.toThrow(/geometryRefs\[0\] braucht eine networkFeatureId/);
+   });
+
+   it("blockiert nicht unterstützte Schema-Versionen", async () => {
+      const brokenNetwork = structuredClone(networkPayload);
+      brokenNetwork.metadata.schemaVersion = "2.0.0";
+
+      await expect(
+         parseDashboardFiles([
+            fileFromJson("projects.json", projectsPayload),
+            fileFromJson("network.geojson", brokenNetwork)
+         ])
+      ).rejects.toThrow(/schemaVersion/);
+   });
+
+   it("blockiert nicht unterstützte Schema-Versionen in projects.json", async () => {
+      const brokenProjects = structuredClone(projectsPayload);
+      brokenProjects.schemaVersion = "2.0.0";
+
+      await expect(
+         parseDashboardFiles([
+            fileFromJson("projects.json", brokenProjects),
+            fileFromJson("network.geojson", networkPayload)
+         ])
+      ).rejects.toThrow(/schemaVersion/);
    });
 });

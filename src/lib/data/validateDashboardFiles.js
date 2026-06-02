@@ -1,9 +1,13 @@
 const PROJECTS_KIND = "h2-dashboard-projects";
 const NETWORK_KIND = "h2-dashboard-network";
+const SUPPORTED_SCHEMA_VERSION = "1.0.0";
+const VALID_DATE_PRECISIONS = new Set(["day", "month", "year"]);
+const FEATURE_LENGTH_FIELDS = ["lengthKm", "geometryLengthKm", "sourceLengthKm", "projectLengthKm"];
 
 const stripBom = text => text.replace(/^\uFEFF/, "");
 const isBlank = value => value === null || value === undefined || String(value).trim() === "";
 const asArray = value => (Array.isArray(value) ? value : []);
+const isPlainObject = value => value !== null && typeof value === "object" && !Array.isArray(value);
 
 function parseJson(text, fileName) {
    try {
@@ -106,6 +110,9 @@ function validateProjects(projectsPayload) {
    if (projectsPayload?.kind !== PROJECTS_KIND) {
       errors.push(`projects.json: kind muss "${PROJECTS_KIND}" sein.`);
    }
+   if (projectsPayload?.schemaVersion !== SUPPORTED_SCHEMA_VERSION) {
+      errors.push(`projects.json: schemaVersion muss "${SUPPORTED_SCHEMA_VERSION}" sein.`);
+   }
    if (!Array.isArray(projectsPayload?.projects) || projectsPayload.projects.length === 0) {
       errors.push("projects.json: projects muss eine nicht leere Liste sein.");
       return { errors, projectIds: new Set(), warnings };
@@ -134,10 +141,45 @@ function validateProjects(projectsPayload) {
       }
       if (!Array.isArray(project.geometryRefs)) {
          errors.push(`${id || label}: geometryRefs muss eine Liste sein.`);
+      } else {
+         project.geometryRefs.forEach((ref, refIndex) => {
+            if (!isPlainObject(ref) || isBlank(ref.networkFeatureId)) {
+               errors.push(`${id || label}: geometryRefs[${refIndex}] braucht eine networkFeatureId.`);
+            }
+         });
+      }
+
+      if (project.dates !== null && project.dates !== undefined && !isPlainObject(project.dates)) {
+         errors.push(`${id || label}: dates muss ein Objekt sein.`);
+      } else {
+         Object.entries(project.dates ?? {}).forEach(([key, value]) => {
+            if (
+               key.endsWith("Precision") &&
+               value !== null &&
+               value !== undefined &&
+               !VALID_DATE_PRECISIONS.has(value)
+            ) {
+               errors.push(`${id || label}: dates.${key} hat eine ungültige Datumspräzision.`);
+            }
+         });
       }
    });
 
    return { errors, projectIds, warnings };
+}
+
+function validateLengthField(props, field, id, label, errors) {
+   if (props[field] === null || props[field] === undefined) return;
+
+   if (typeof props[field] !== "number") {
+      errors.push(`${id || label}: ${field} muss eine Zahl sein.`);
+      return;
+   }
+
+   const length = Number(props[field]);
+   if (!Number.isFinite(length) || length < 0 || length > 1000) {
+      errors.push(`${id || label}: ${field} ist nicht plausibel.`);
+   }
 }
 
 function validateNetwork(networkPayload, projectIds) {
@@ -146,6 +188,9 @@ function validateNetwork(networkPayload, projectIds) {
 
    if (networkPayload?.metadata?.kind !== NETWORK_KIND) {
       errors.push(`network.geojson: metadata.kind muss "${NETWORK_KIND}" sein.`);
+   }
+   if (networkPayload?.metadata?.schemaVersion !== SUPPORTED_SCHEMA_VERSION) {
+      errors.push(`network.geojson: metadata.schemaVersion muss "${SUPPORTED_SCHEMA_VERSION}" sein.`);
    }
    if (networkPayload?.type !== "FeatureCollection" || !Array.isArray(networkPayload.features)) {
       errors.push("network.geojson: Erwartet wird eine GeoJSON FeatureCollection.");
@@ -205,11 +250,14 @@ function validateNetwork(networkPayload, projectIds) {
          warnings.push(`${id || label}: medium fehlt oder ist ungewöhnlich.`);
       }
 
-      if (props.lengthKm !== null && props.lengthKm !== undefined) {
-         const length = Number(props.lengthKm);
-         if (!Number.isFinite(length) || length < 0 || length > 1000) {
-            errors.push(`${id || label}: lengthKm ist nicht plausibel.`);
-         }
+      FEATURE_LENGTH_FIELDS.forEach(field => validateLengthField(props, field, id, label, errors));
+
+      if (
+         props.commissioningDatePrecision !== null &&
+         props.commissioningDatePrecision !== undefined &&
+         !VALID_DATE_PRECISIONS.has(props.commissioningDatePrecision)
+      ) {
+         errors.push(`${id || label}: commissioningDatePrecision hat eine ungültige Datumspräzision.`);
       }
 
       validateGeometry(feature.geometry, id || label, errors);

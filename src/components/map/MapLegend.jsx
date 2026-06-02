@@ -16,7 +16,7 @@ function participationKey(feature) {
 }
 
 function participationLabel(key) {
-   return key === "context" ? "Dritte" : "OGE";
+   return key === "context" ? "Kontextleitung" : "Projektleitung";
 }
 
 function lineTypeKey(feature) {

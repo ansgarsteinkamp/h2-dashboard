@@ -24,18 +24,17 @@ const HELP_TEXT = {
    builder: "Filtert nach dem in den Quelldaten gepflegten Bauherrn oder Partner.",
    cluster: "Filtert nach dem übergeordneten Projektcluster aus den Quelldaten.",
    ibn: "Filtert nach internem IBN-Jahr der Projekte. Kontextleitungen nutzen das in den Geodaten angegebene Inbetriebnahmejahr.",
-   mapMode:
-      "Steuert, ob die Karte alle Kartenobjekte, nur Netzelemente aus Projekten oder nur Leitungen Dritter zeigt.",
+   mapMode: "Kontextleitungen sind Leitungen auf der Karte, die keinem Projekt im Dashboard zugeordnet sind.",
    measure:
-      "Filtert nach fachlicher Maßnahme, z. B. Neubau, Umstellung oder Umhängung. Leitungen Dritter werden über die Kartendarstellung getrennt.",
+      "Filtert nach fachlicher Maßnahme, z. B. Neubau, Umstellung oder Umhängung. Drittleitung ist eine konkrete Maßnahme, nicht die Sammelkategorie aller Kontextleitungen.",
    medium: "Filtert Projekte und Kartenobjekte nach transportiertem Medium.",
    networkElement:
       "Filtert nach Art des Netzelements. Stationsprojekte können in der Liste erscheinen, auch wenn aktuell keine Kartenpunkte vorliegen.",
    ogeLength: "Summe der internen Projektlängen der aktuell ausgewählten Leitungsprojekte.",
    ogeResponsible:
       "Filtert auf Projekte mit „Bauverantwortung OGE = Ja“ aus den Quelldaten. Das ist nicht identisch mit „Bauherr = OGE“; Partner- und Gemeinschaftsprojekte können abweichen.",
-   contextFeatures: "Anzahl der aktuell sichtbaren Leitungen Dritter auf der Karte.",
-   contextLength: "Summe der Leitungslängen der aktuell sichtbaren Leitungen Dritter.",
+   contextFeatures: "Anzahl der aktuell sichtbaren Leitungen, die keinem Projekt im Dashboard zugeordnet sind.",
+   contextLength: "Summe der Anzeigelängen der aktuell sichtbaren Kontextleitungen.",
    projectCount: "Anzahl der Projekte, die zu den aktiven Filtern und der Suche passen.",
    mappedProjects: "Anzahl der ausgewählten Projekte mit mindestens einem Kartenobjekt."
 };
@@ -55,7 +54,16 @@ function MetricTile({ description, label, suffix, value }) {
    return (
       <div className="min-w-0 px-3 first:pl-0 last:pr-0">
          <div className="mb-1 flex min-w-0 items-center gap-1.5 text-[0.62rem] font-medium text-label-accent uppercase">
-            {description ? <HelpLabel description={description}>{label}</HelpLabel> : <span>{label}</span>}
+            {description ? (
+               <HelpLabel
+                  description={description}
+                  labelClassName="overflow-visible whitespace-normal text-clip leading-tight"
+               >
+                  {label}
+               </HelpLabel>
+            ) : (
+               <span>{label}</span>
+            )}
          </div>
          <div className="flex min-w-0 items-baseline gap-1.5 overflow-hidden">
             <strong className="shrink-0 whitespace-nowrap text-lg leading-none font-medium text-card-foreground">
@@ -84,7 +92,7 @@ function MetricsDashboard({ mapMode, metrics }) {
                   description={HELP_TEXT.projectCount}
                />
                <MetricTile
-                  label="Dritte"
+                  label="Ohne Projekt"
                   value={metricIntegerLabel(metrics.featureCount)}
                   suffix="Leitungen"
                   description={HELP_TEXT.contextFeatures}
@@ -242,10 +250,6 @@ export default function FilterPanel({
    options,
    setFilter
 }) {
-   const displayedMapModeOptions = mapModeOptions.map(option =>
-      option.value === "context" ? { ...option, label: "Leitungen Dritter" } : option
-   );
-
    return (
       <aside
          aria-label="Kennzahlen und Filter"
@@ -268,7 +272,7 @@ export default function FilterPanel({
                      label="Kartendarstellung"
                      description={HELP_TEXT.mapMode}
                      onChange={value => setFilter("mapMode", value)}
-                     options={displayedMapModeOptions}
+                     options={mapModeOptions}
                      value={filters.mapMode}
                   />
                   <SelectField

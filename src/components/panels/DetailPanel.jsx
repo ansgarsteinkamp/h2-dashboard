@@ -7,6 +7,7 @@ import {
    costLabel,
    dateLabelWithPrecision,
    dnLabel,
+   isEmpty,
    listLabel,
    mediumLabel,
    numberLabel,
@@ -17,6 +18,20 @@ import {
 } from "@/lib/domain/formatters";
 
 const EMPTY_VALUE = "keine Angabe";
+const CONTEXT_FEATURE_FIELDS = [
+   ["id", "Netzelement-ID"],
+   ["sourceProjectId", "ID aus Quelldaten"],
+   ["medium", "Medium", "medium"],
+   ["networkElement", "Netzelement"],
+   ["measure", "Maßnahme"],
+   ["lengthKm", "Anzeigelänge Karte", "km"],
+   ["sourceLengthKm", "Quelllänge", "km"],
+   ["geometryLengthKm", "Geometrische Kartenlänge", "km"],
+   ["projectLengthKm", "Projektlänge", "km", true],
+   ["dpBar", "DP", "bar", true],
+   ["source", "Quelle"],
+   ["sourceFeatureId", "Feature-ID aus Quelle"]
+];
 
 const PROJECT_GROUPS = [
    {
@@ -55,7 +70,7 @@ const PROJECT_GROUPS = [
          ["dates.commissioningDeltaDays", "Differenz IBN-Termine", "days"],
          ["dates.projectStart", "Projektstart", "date", "dates.projectStartPrecision"],
          ["dates.constructionStart", "Baustart", "date", "dates.constructionStartPrecision"],
-         ["hasSchedule", "Terminplan-Daten vorhanden", "boolean"]
+         ["hasSchedule", "Termin-Eckdaten vorhanden", "boolean"]
       ]
    },
    {
@@ -68,6 +83,7 @@ const PROJECT_GROUPS = [
          ["technical.dnRaw", "DN", "dn"],
          ["technical.dnExternalRaw", "DN extern", "dnExternal"],
          ["technical.dpBar", "DP", "bar"],
+         ["technical.dpExternalBar", "DP extern", "bar"],
          ["technical.lineSection", "Leitungsabschnitt"],
          ["technical.ogeLineNumber", "Leitungsnummer"],
          ["technical.drivePowerInternalMw", "Antriebsleistung intern", "mw"],
@@ -233,17 +249,11 @@ export default function DetailPanel({ selection, onClose }) {
             </div>
          ) : (
             <div className="mt-4 grid gap-2.5">
-               <h3 className="m-0 text-[0.7rem] font-medium text-label-accent uppercase">Leitung Dritter</h3>
+               <h3 className="m-0 text-[0.7rem] font-medium text-label-accent uppercase">Kontextleitung</h3>
                <dl className="grid border-t border-border/50">
-                  {[
-                     ["id", "Netzelement-ID"],
-                     ["sourceProjectId", "Quell-ID"],
-                     ["medium", "Medium", "medium"],
-                     ["networkElement", "Netzelement"],
-                     ["measure", "Maßnahme"],
-                     ["lengthKm", "Leitungslänge", "km"],
-                     ["source", "Quelle"]
-                  ].map(([path, label, type]) => (
+                  {CONTEXT_FEATURE_FIELDS.filter(
+                     ([path, _label, _type, optional]) => !optional || !isEmpty(getValue(feature.properties, path))
+                  ).map(([path, label, type]) => (
                      <DetailRow
                         context={{ precision: feature.properties.commissioningDatePrecision }}
                         key={path}

@@ -9,7 +9,28 @@ import { ALL_VALUE } from "@/lib/domain/constants";
 
 const dashboardData = {
    network: {
-      features: []
+      features: [
+         {
+            geometry: {
+               coordinates: [
+                  [7, 51],
+                  [7.1, 51.1]
+               ],
+               type: "LineString"
+            },
+            properties: {
+               contextOnly: true,
+               geometryLengthKm: 11.4,
+               id: "ctx-1",
+               lengthKm: 20,
+               medium: "Wasserstoff",
+               measure: "Drittleitung",
+               networkElement: "Leitung",
+               sourceLengthKm: 18
+            },
+            type: "Feature"
+         }
+      ]
    },
    projects: [
       {
@@ -76,5 +97,24 @@ describe("usePipelineFilters", () => {
       expect(result.current.filters.yearTo).toBe(ALL_VALUE);
       expect(result.current.filteredProjects).toHaveLength(1);
       expect(result.current.filteredProjects[0].id).toBe("B-1");
+   });
+
+   it("uses display length for context feature metrics when available", () => {
+      const { result } = renderHook(() => usePipelineFilters(dashboardData));
+
+      act(() => result.current.setFilter("mapMode", "context"));
+
+      expect(result.current.metrics.lengthKm).toBe(20);
+   });
+
+   it("falls back to source length for feature metrics when display length is missing", () => {
+      const fallbackData = structuredClone(dashboardData);
+      fallbackData.network.features[0].properties.lengthKm = null;
+
+      const { result } = renderHook(() => usePipelineFilters(fallbackData));
+
+      act(() => result.current.setFilter("mapMode", "context"));
+
+      expect(result.current.metrics.lengthKm).toBe(18);
    });
 });

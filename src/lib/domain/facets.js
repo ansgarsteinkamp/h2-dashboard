@@ -6,7 +6,6 @@ const nonEmpty = value => value !== null && value !== undefined && String(value)
 const option = value => ({ value, label: value });
 const labeledOption = (value, label) => ({ value, label });
 const sortedValues = values => [...values].filter(nonEmpty).sort(collator.compare);
-const measureLabel = value => (value === "Drittleitung" ? "Drittleitung (Kontext)" : value);
 
 function orderedMediums(values) {
    const set = new Set(values);
@@ -58,7 +57,7 @@ export function buildFilterOptions(projects, features = []) {
       clusters: [{ value: ALL_VALUE, label: "Alle Projektcluster" }, ...sortedValues(sets.clusters).map(option)],
       measures: [
          { value: ALL_VALUE, label: "Alle Maßnahmen" },
-         ...sortedValues(sets.measures).map(value => labeledOption(value, measureLabel(value)))
+         ...sortedValues(sets.measures).map(value => labeledOption(value, value))
       ],
       mediums: [
          { value: ALL_VALUE, label: "Alle" },

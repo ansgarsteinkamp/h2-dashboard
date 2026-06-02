@@ -3,7 +3,7 @@ export const ALL_VALUE = "__all__";
 export const MAP_MODE_OPTIONS = [
    { value: "all", label: "Alle" },
    { value: "projects", label: "Projekt-Netzelemente" },
-   { value: "context", label: "Leitungen Dritter" }
+   { value: "context", label: "Kontextleitungen" }
 ];
 
 export const MEDIUM_ORDER = ["Wasserstoff", "CO2", "Erdgas"];

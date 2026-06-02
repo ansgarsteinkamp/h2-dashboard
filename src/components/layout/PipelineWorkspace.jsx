@@ -110,7 +110,6 @@ export default function PipelineWorkspace({ countries, dashboardData }) {
                }
                filters={filters.filters}
                metrics={filters.metrics}
-               metadata={dashboardData.metadata}
                onResetFilters={resetFilters}
                mapModeOptions={filters.mapModeOptions}
                options={filters.options}

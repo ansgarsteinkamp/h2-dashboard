@@ -110,7 +110,7 @@ export const pipelineMeta = feature => {
 
    if (props.contextOnly) {
       return [
-         "Dritte",
+         "Kontextleitung",
          props.sourceProjectId || props.id,
          mediumLabel(props.medium),
          props.networkElement,
