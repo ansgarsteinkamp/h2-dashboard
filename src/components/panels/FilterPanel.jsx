@@ -202,10 +202,10 @@ function OgeResponsibleSwitch({ active, onChange }) {
 
    return (
       <div className="flex min-h-8 min-w-0 items-center gap-2.5">
-         <label className="flex min-w-0 cursor-pointer items-center gap-2.5" htmlFor={inputId}>
+         <label className="relative flex min-w-0 cursor-pointer select-none items-center gap-2.5" htmlFor={inputId}>
             <input
                checked={active}
-               className="peer sr-only"
+               className="peer absolute inset-0 z-10 h-full w-full cursor-pointer opacity-0"
                id={inputId}
                onChange={event => onChange(event.target.checked)}
                role="switch"
@@ -214,14 +214,16 @@ function OgeResponsibleSwitch({ active, onChange }) {
             <span
                aria-hidden="true"
                data-state={state}
-               className="relative h-4.5 w-8 shrink-0 rounded-full border border-border bg-field transition-colors peer-focus-visible:ring-3 peer-focus-visible:ring-ring/65 peer-focus-visible:ring-offset-1 peer-focus-visible:ring-offset-background peer-focus-visible:outline-none data-[state=checked]:border-primary/70 data-[state=checked]:bg-primary/80 dark:peer-focus-visible:ring-ring/50"
+               className="pointer-events-none relative h-4.5 w-8 shrink-0 rounded-full border border-border bg-field transition-colors peer-focus-visible:ring-3 peer-focus-visible:ring-ring/65 peer-focus-visible:ring-offset-1 peer-focus-visible:ring-offset-background peer-focus-visible:outline-none data-[state=checked]:border-primary/70 data-[state=checked]:bg-primary/80 dark:peer-focus-visible:ring-ring/50"
             >
                <span
                   data-state={state}
                   className="absolute top-1/2 left-0.5 size-3.5 -translate-y-1/2 rounded-full bg-muted-foreground transition-transform data-[state=checked]:translate-x-3.25 data-[state=checked]:bg-primary-foreground"
                />
             </span>
-            <span className="min-w-0 truncate text-xs font-medium text-card-foreground">Nur Bauverantwortung OGE</span>
+            <span className="pointer-events-none min-w-0 truncate text-xs font-medium text-card-foreground">
+               Nur Bauverantwortung OGE
+            </span>
          </label>
          <HelpTooltip className="size-4" contentClassName="max-w-80" label="Bauverantwortung OGE">
             {HELP_TEXT.ogeResponsible}
